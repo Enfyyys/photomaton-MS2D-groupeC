@@ -102,6 +102,9 @@ app.get("/images", async (req, res) => {
 // Servir les images stockées localement
 app.use("/saved_images", express.static(localSavePath));
 
+// Route pour afficher menu.html à distance
+app.use(express.static(path.join(__dirname, "../photomaton_menu")));
+
 // Route pour afficher la liste des fichiers dans "saved_images"
 app.get("/saved_images", (req, res) => {
     fs.readdir(localSavePath, (err, files) => {
