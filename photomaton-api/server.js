@@ -1,29 +1,65 @@
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
+const multer = require("multer");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// 📂 Définition du bon chemin absolu pour le menu
-const menuPath = "/home/admin/photomaton/photomaton-MS2D-groupeC/photomaton-front/photomaton-menu";
+// Configuration CORS pour accepter les requêtes distantes
+app.use(cors());
+app.use(express.json());
 
-// 🔹 Vérifier si le dossier existe
-if (!fs.existsSync(menuPath)) {
-    console.error("❌ ERREUR: Le dossier photomaton-menu est introuvable !");
-    process.exit(1);
-}
+// 📂 Définition des chemins absolus pour ton frontend
+const menuPath = path.join(__dirname, "photomaton-front/photomaton-menu");
+const photoPath = path.join(__dirname, "photomaton-front/photomaton-photo");
+const printPath = path.join(__dirname, "photomaton-front/photomaton-imprimer");
 
-// ✅ Servir le menu principal
+// 📂 Servir les applications frontend
 app.use(express.static(menuPath));
+app.use(express.static(photoPath));
+app.use(express.static(printPath));
 
-// 🏠 Route par défaut pour tester si le serveur tourne
-app.get("/", (req, res) => {
-    res.send("<h1>🚀 Serveur Photomaton en ligne !</h1><p>Accédez à <a href='/menu.html'>menu.html</a></p>");
+// 📂 Servir les images stockées localement
+const localSavePath = path.join(__dirname, "saved_images");
+if (!fs.existsSync(localSavePath)) {
+    fs.mkdirSync(localSavePath, { recursive: true });
+}
+app.use("/saved_images", express.static(localSavePath));
+
+// 📸 Route pour récupérer les images
+app.get("/images", (req, res) => {
+    try {
+        const files = fs.readdirSync(localSavePath).filter(file => file.endsWith(".png"));
+        const images = files.map(file => ({
+            url: `/saved_images/${file}`,
+            created_at: fs.statSync(path.join(localSavePath, file)).mtime.toISOString(),
+        }));
+        res.json(images);
+    } catch (error) {
+        console.error("Erreur récupération des images :", error);
+        res.status(500).json({ error: "Erreur récupération des images" });
+    }
 });
 
-// 🖥 Démarrage du serveur
+// 📤 Route pour uploader une image
+const upload = multer({ dest: "uploads/" });
+app.post("/upload", upload.single("file"), (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: "Aucun fichier reçu" });
+
+        const filePath = path.join(localSavePath, `${Date.now()}.png`);
+        fs.renameSync(req.file.path, filePath);
+
+        res.json({ message: "Image sauvegardée", path: filePath });
+    } catch (error) {
+        console.error("Erreur upload :", error);
+        res.status(500).json({ error: "Échec de l'upload" });
+    }
+});
+
+// 🔥 Démarrer le serveur
 app.listen(port, "0.0.0.0", () => {
-    console.log(`🚀 Serveur en ligne sur http://192.168.20.141:${port}/`);
+    console.log(`🚀 Serveur en ligne : http://192.168.20.141:${port}/`);
 });
