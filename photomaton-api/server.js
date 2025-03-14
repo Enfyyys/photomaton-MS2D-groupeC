@@ -34,7 +34,9 @@ if (!fs.existsSync(photoPath)) {
 }
 
 // ✅ Servir les autres applications
-app.use("/photomaton-photo", express.static(path.join(frontPath, "photomaton-photo")));
+app.get("/photomaton-photo/index.html", (req, res) => {
+    res.sendFile(path.join(frontPath, "photomaton-photo", "index.html"));
+});
 app.use("/photomaton-imprimer", express.static(path.join(frontPath, "photomaton-imprimer")));
 
 // ✅ Servir les images stockées localement
