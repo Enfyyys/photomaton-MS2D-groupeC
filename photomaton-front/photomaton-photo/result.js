@@ -67,7 +67,10 @@ document.getElementById("upload-photo").addEventListener("click", async () => {
     let formData = new FormData();
     formData.append("file", blob);
     formData.append("upload_preset", "mon_preset"); // Remplace par ton upload_preset
-    formData.append("title", "image-" + nextId);  // Utiliser l'ID incrémenté comme titre
+
+    const date = new Date(Date.now());
+    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}}`;
+    formData.append("title", formattedDate + "-" + nextId);  // Utiliser l'ID incrémenté comme titre
 
     try {
         let response = await fetch("http://192.168.20.141:3000/upload", {
