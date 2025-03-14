@@ -39,6 +39,14 @@ body {
     height: 105px;
 }
 
+.spidey-icon {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 80px;
+    height: 115px;
+}
+
 .filters {
     display: flex;
     justify-content: center;
