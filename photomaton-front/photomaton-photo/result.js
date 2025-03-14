@@ -69,7 +69,7 @@ document.getElementById("upload-photo").addEventListener("click", async () => {
     formData.append("upload_preset", "mon_preset"); // Remplace par ton upload_preset
 
     const date = new Date(Date.now());
-    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}}`;
+    const formattedDate = `${date.getFullYear() + date.getMonth() + date.getDate() + "-" + date.getHours() + date.getMinutes() + date.getSeconds()}`;
     formData.append("title", formattedDate + "-" + nextId);  // Utiliser l'ID incrémenté comme titre
 
     try {
