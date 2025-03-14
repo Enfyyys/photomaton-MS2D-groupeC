@@ -24,6 +24,15 @@ app.use(express.json());
 // ✅ Servir le menu principal
 app.use("/", express.static(path.join(frontPath, "photomaton-menu")));
 
+
+// DEBUG
+const photoPath = path.join(frontPath, "photomaton-photo");
+console.log("📂 Chemin photomaton-photo =", photoPath);
+
+if (!fs.existsSync(photoPath)) {
+    console.error("❌ ERREUR : Le dossier photomaton-photo n'existe pas !");
+}
+
 // ✅ Servir les autres applications
 app.use("/photomaton-photo", express.static(path.join(frontPath, "photomaton-photo")));
 app.use("/photomaton-imprimer", express.static(path.join(frontPath, "photomaton-imprimer")));
