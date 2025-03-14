@@ -13,10 +13,9 @@ navigator.mediaDevices.getUserMedia({ video: true })
     });
 
 // 🎵 Chargement des sons
-const countdownSound = new Audio("sounds/click.mp3");
-const cheeseSound = new Audio("sounds/camera-click.mp3");
-const cameraSound = new Audio("sounds/aaa.mp3");
-const popSound = new Audio("sounds/aaa.mp3");
+const countdownSound = new Audio("sounds/clic.wav");
+const cameraSound = new Audio("sounds/camera_shutter.wav");
+const popSound = new Audio("sounds/party_trumpet.wav");
 
 // Fonction pour démarrer le compte à rebours et capturer l'image
 function startCountdown() {
@@ -29,7 +28,6 @@ function startCountdown() {
             countdownSound.play(); // 🔊 Joue le bip du compte à rebours
             countdown.textContent = count;
         } else if (count == 0) {
-            cheeseSound.play(); // 🔊 "Cheese!" juste avant la prise de photo
             countdown.textContent = "Cheeeese ! 😁";
         } else {
             clearInterval(interval);
@@ -59,7 +57,7 @@ function capturePhoto() {
     let photoData = canvas.toDataURL("image/png");
     localStorage.setItem("previewPhoto", photoData);
 
-    //cameraSound.play(); // 🔊 Son de l’appareil photo
+    cameraSound.play(); // 🔊 Son de l’appareil photo
     launchConfetti(); // 🎊 Ajouter des confettis
 
     // Redirection après une petite animation
@@ -77,7 +75,7 @@ function launchConfetti() {
         confetti.style.animationDuration = Math.random() * 2 + 3 + "s";
         document.body.appendChild(confetti);
 
-        //popSound.play(); // 🔊 Petit son de pop à chaque confetti
+        popSound.play(); // 🔊 Petit son de pop à chaque confetti
 
         setTimeout(() => {
             confetti.remove();
