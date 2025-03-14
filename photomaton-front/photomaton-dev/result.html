@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photomaton - Résultat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="result-page">
+    <div class="container">
+        <div class="photo-frame">
+            <img id="preview-photo" src="" alt="Photo prise" />
+            <img class="pirate-icon" src="pirate.png" alt="Pirate" />
+        </div>
+        
+        <div class="filters">
+            <button onclick="applyFilter('none')">😊</button>
+            <button onclick="applyFilter('grayscale(100%)')">👑</button>
+            <button onclick="applyFilter('sepia(100%)')">⭐</button>
+            <button onclick="applyFilter('contrast(200%)')">👓</button>
+            <button onclick="applyFilter('hue-rotate(90deg)')">💖</button>
+            <button onclick="applyFilter('invert(100%)')">🎵</button>
+        </div>
+
+        <button id="upload-photo">➡️</button>
+        <button id="retake-photo" onclick="window.location.href='index.html'">⬅️</button>
+    </div>
+    <script src="result.js"></script>
+</body>
+</html>

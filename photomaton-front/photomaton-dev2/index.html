@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Images</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Colonne Gauche : Liste des images -->
+        <div class="sidebar">
+            <h2>📂 Images disponibles</h2>
+            <ul id="image-list"></ul>
+        </div>
+
+        <!-- Colonne Droite : Aperçu et Actions -->
+        <div class="main-content">
+            <h2>🖼️ Aperçu</h2>
+            <img id="image-preview" src="" alt="Sélectionnez une image" />
+            <div class="actions">
+                <button onclick="printImage()">🖨️ Imprimer</button>
+                <button onclick="sendByEmail()">📧 Envoyer par email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bouton retour au menu (discret) -->
+    <button class="back-button" onclick="goToMenu()">Home</button>
+
+    <script src="script.js"></script>
+
+    <script>
+        function goToMenu() {
+            localStorage.removeItem("selectedApp");
+            window.location.href = "../photomaton_menu/menu.html";
+        }
+    </script>
+</body>
+</html>

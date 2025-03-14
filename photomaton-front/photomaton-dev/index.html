@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photomaton - Capture</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="main-container">
+        <div class="container">
+            <h1 class="title">Photomaton</h1>
+
+            <div class="content">
+                <!-- Zone vidéo pour afficher le flux de la caméra -->
+                <video id="camera-feed" autoplay class="camera-feed"></video>
+
+                <!-- Compte à rebours -->
+                <div id="countdown" class="countdown"></div>
+            </div>
+
+            <!-- Bouton pour prendre une photo -->
+            <button id="take-photo" class="take-photo-btn" onclick="takePhoto()">📸 Prendre une photo</button>
+        </div>
+
+        <!-- Bouton Retour au menu -->
+        <button class="back-button" onclick="goToMenu()">Home</button>
+    </main>
+
+    <script src="script.js"></script>
+
+    <script>
+        function goToMenu() {
+            localStorage.removeItem("selectedApp");
+            window.location.href = "../photomaton_menu/menu.html";
+        }
+    </script>
+    
+</body>
+</html>

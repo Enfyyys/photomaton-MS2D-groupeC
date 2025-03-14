@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Principal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="menu-container">
+        <h1>Bienvenue ! Choisissez une application :</h1>
+        <button onclick="selectApp('photo')">📷 Prendre une photo</button>
+        <button onclick="selectApp('impression')">🖨️ Impression & Email</button>
+    </div>
+
+    <script>
+        // Vérifie si un choix existe déjà
+        window.onload = function() {
+            const selectedApp = localStorage.getItem("selectedApp");
+            if (selectedApp) {
+                window.location.href = selectedApp === "photo" ? "../photomaton-dev/index.html" : "../photomaton-dev2/index.html";
+            }
+        }
+
+        // Stocke le choix et redirige
+        function selectApp(app) {
+            localStorage.setItem("selectedApp", app);
+            window.location.href = app === "photo" ? "../photomaton-dev/index.html" : "../photomaton-dev2/index.html";
+        }
+    </script>
+</body>
+</html>

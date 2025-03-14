@@ -1,0 +1,207 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #ffecb3, #bbdefb);
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.photo-frame {
+    position: relative;
+    border: 5px solid yellow;
+    margin-bottom: 20px;
+}
+
+.photo-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Assure que l'image couvre toute la zone */
+}
+
+.pirate-icon {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 50px;
+    height: 50px;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filters button {
+    background: white;
+    border: 2px solid gray;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filters button:hover {
+    background: lightgray;
+}
+
+#upload-photo {
+    background: linear-gradient(to right, #ff80ab, #64b5f6);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#upload-photo:hover {
+    transform: scale(1.1);
+}
+
+#retake-photo {
+    display: block;
+    margin: 10px auto 0 0; /* Marge en haut et alignement à gauche */
+    background: rgb(198, 192, 192); /* Change la couleur si nécessaire */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+#retake-photo:hover {
+    background: rgb(98, 93, 93);
+}
+
+/* Title */
+.title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #1E3A8A;
+    margin-bottom: 30px;
+    animation: bounce 1.5s infinite;
+}
+
+/* Countdown */
+.countdown {
+    font-size: 30px;
+    font-weight: bold;
+    color: #FFEB3B;
+}
+
+/* Take photo button */
+.take-photo-btn {
+    background: linear-gradient(to right, #4CAF50, #2196F3);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.take-photo-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.take-photo-btn:active {
+    transform: scale(0.95);
+}
+
+/* 🎊 Styles des confettis */
+.confetti {
+    position: absolute;
+    top: -10px;
+    width: 12px;
+    height: 12px;
+    background-color: red;
+    opacity: 0.8;
+    border-radius: 50%;
+    animation: confetti-fall 3s linear infinite;
+}
+
+@keyframes confetti-fall {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(720deg); }
+}
+
+/* 🎨 Couleurs variées pour les confettis */
+.confetti:nth-child(odd) { background-color: blue; }
+.confetti:nth-child(even) { background-color: green; }
+.confetti:nth-child(3n) { background-color: yellow; }
+.confetti:nth-child(5n) { background-color: orange; }
+
+/* ======== COMPTE À REBOURS 📢 ======== */
+#countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 100px;
+    font-weight: bold;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    animation: pulse 0.8s ease-in-out infinite alternate;
+}
+
+/* Effet de pulsation du compte à rebours */
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    100% { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* Cache le countdown quand il est vide */
+#countdown:empty {
+    display: none;
+}
+
+/* Bouton retour au menu (discret et plus petit) */
+.back-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: transparent;
+    color: transparent;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+}
+
+/* Apparition au survol */
+.back-button:hover {
+    background-color: rgba(244, 67, 54, 0.9);
+    color: white;
+}
+
