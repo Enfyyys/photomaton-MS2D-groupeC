@@ -5,7 +5,7 @@ Bienvenue sur **Photomaton**, un projet regroupant plusieurs applications permet
 ## 📁 Structure du projet
 
 ```
-photomaton/
+photomaton-MS2D-groupeC/
 │── photomaton-api/      # Backend (Photomaton API)
 │── photomaton-front/    # Application de capture photo
 │   ├── photomaton-menu/       # Page d'accueil pour sélectionner l'application
