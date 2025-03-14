@@ -7,30 +7,33 @@ const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
 
+// 📂 Définition des chemins absolus
+const projectRoot = "/home/admin/photomaton/photomaton-MS2D-groupeC";  // Mettre le chemin correct de ton projet
+const frontPath = path.join(projectRoot, "photomaton-front");
+
 // 📂 Création du dossier `saved_images/` s'il n'existe pas
-const localSavePath = path.join(__dirname, "saved_images");
+const localSavePath = path.join(projectRoot, "saved_images");
 if (!fs.existsSync(localSavePath)) {
     fs.mkdirSync(localSavePath, { recursive: true });
 }
 
-// ✅ Configuration CORS (permet les accès distants)
+// ✅ Configuration CORS (accès distant autorisé)
 app.use(cors());
 app.use(express.json());
 
 // ✅ Servir le menu principal
-app.use(express.static(path.join(__dirname, "photomaton-front/photomaton-menu")));
+app.use("/", express.static(path.join(frontPath, "photomaton-menu")));
 
 // ✅ Servir les autres applications
-app.use("/photomaton-photo", express.static(path.join(__dirname, "photomaton-front/photomaton-photo")));
-app.use("/photomaton-imprimer", express.static(path.join(__dirname, "photomaton-front/photomaton-imprimer")));
+app.use("/photomaton-photo", express.static(path.join(frontPath, "photomaton-photo")));
+app.use("/photomaton-imprimer", express.static(path.join(frontPath, "photomaton-imprimer")));
 
 // ✅ Servir les images stockées localement
 app.use("/saved_images", express.static(localSavePath));
 
-// 📸 Configuration Multer (pour upload des photos)
+// 📸 Route pour uploader une photo et la sauvegarder
 const upload = multer({ dest: "uploads/" });
 
-// 📸 Route pour prendre une photo et la sauvegarder
 app.post("/upload", upload.single("file"), async (req, res) => {
     try {
         if (!req.file) {
@@ -40,9 +43,8 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         const fileName = `image-${Date.now()}.png`;
         const localFilePath = path.join(localSavePath, fileName);
 
-        // Copier le fichier dans le dossier des images sauvegardées
         fs.copyFileSync(req.file.path, localFilePath);
-        fs.unlinkSync(req.file.path); // Supprimer le fichier temporaire
+        fs.unlinkSync(req.file.path);
 
         console.log(`📂 Image sauvegardée : ${localFilePath}`);
 
@@ -53,7 +55,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     }
 });
 
-// 🖼 Route pour récupérer la liste des images enregistrées
+// 🖼 Route pour lister les images enregistrées
 app.get("/images", async (req, res) => {
     try {
         const files = fs.readdirSync(localSavePath).filter(file => file.endsWith(".png"));
