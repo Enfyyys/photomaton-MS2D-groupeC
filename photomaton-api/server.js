@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // 📂 Définition des chemins absolus
-const projectRoot = "/home/admin/photomaton/photomaton-MS2D-groupeC";  // Mettre le chemin correct de ton projet
+const projectRoot = "../photomaton/photomaton-MS2D-groupeC";  // Mettre le chemin correct de ton projet
 const frontPath = path.join(projectRoot, "photomaton-front");
 
 // 📂 Création du dossier `saved_images/` s'il n'existe pas
@@ -34,10 +34,10 @@ if (!fs.existsSync(photoPath)) {
 }
 
 // ✅ Servir les autres applications
-app.get("/photomaton-photo/index.html", (req, res) => {
+app.get("../photomaton-photo/index.html", (req, res) => {
     res.sendFile(path.join(frontPath, "photomaton-photo", "index.html"));
 });
-app.use("/photomaton-imprimer", express.static(path.join(frontPath, "photomaton-imprimer")));
+app.use("../photomaton-imprimer", express.static(path.join(frontPath, "photomaton-imprimer")));
 
 // ✅ Servir les images stockées localement
 app.use("/saved_images", express.static(localSavePath));
