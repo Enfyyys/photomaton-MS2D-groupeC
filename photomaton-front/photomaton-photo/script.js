@@ -1,16 +1,7 @@
-// Récupération des éléments
+// 🎥 Récupération des éléments
 const video = document.getElementById("camera-feed");
 const countdown = document.getElementById("countdown");
 const takePhotoBtn = document.getElementById("take-photo");
-
-// Accéder à la webcam
-navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-        video.srcObject = stream;
-    })
-    .catch(error => {
-        console.error("Erreur d'accès à la caméra :", error);
-    });
 
 // 🎵 Chargement des sons
 const countdownSound = new Audio("sounds/click.mp3");
@@ -18,7 +9,17 @@ const cheeseSound = new Audio("sounds/camera-click.mp3");
 const cameraSound = new Audio("sounds/aaa.mp3");
 const popSound = new Audio("sounds/aaa.mp3");
 
-// Fonction pour démarrer le compte à rebours et capturer l'image
+// ✅ Accéder à la webcam avec meilleure compatibilité
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    .then(stream => {
+        video.srcObject = stream;
+    })
+    .catch(error => {
+        console.error("❌ Erreur d'accès à la caméra :", error);
+        alert("⚠️ Impossible d'accéder à la caméra. Vérifiez les permissions !");
+    });
+
+// 🎬 Fonction pour démarrer le compte à rebours et capturer l'image
 function startCountdown() {
     let count = 3;
     countdown.textContent = count;
@@ -26,9 +27,9 @@ function startCountdown() {
 
     let interval = setInterval(() => {
         if (count > 0) {
-            countdownSound.play(); // 🔊 Joue le bip du compte à rebours
+            countdownSound.play(); // 🔊 Bip du compte à rebours
             countdown.textContent = count;
-        } else if (count == 0) {
+        } else if (count === 0) {
             cheeseSound.play(); // 🔊 "Cheese!" juste avant la prise de photo
             countdown.textContent = "Cheeeese ! 😁";
         } else {
@@ -47,8 +48,7 @@ function startCountdown() {
     }, 300);
 }
 
-
-// Fonction pour capturer la photo
+// 📸 Fonction pour capturer la photo
 function capturePhoto() {
     let canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
@@ -59,10 +59,13 @@ function capturePhoto() {
     let photoData = canvas.toDataURL("image/png");
     localStorage.setItem("previewPhoto", photoData);
 
-    //cameraSound.play(); // 🔊 Son de l’appareil photo
-    launchConfetti(); // 🎊 Ajouter des confettis
+    // 🔊 Jouer le son de l’appareil photo
+    cameraSound.play();
+    
+    // 🎊 Lancer des confettis
+    launchConfetti();
 
-    // Redirection après une petite animation
+    // 🔄 Redirection vers la page de résultat après une animation
     setTimeout(() => {
         window.location.href = "result.html";
     }, 1500);
@@ -77,13 +80,11 @@ function launchConfetti() {
         confetti.style.animationDuration = Math.random() * 2 + 3 + "s";
         document.body.appendChild(confetti);
 
-        //popSound.play(); // 🔊 Petit son de pop à chaque confetti
-
         setTimeout(() => {
             confetti.remove();
         }, 5000);
     }
 }
 
-// Déclenchement de la capture au clic
+// 🖱️ Déclenchement de la capture au clic
 takePhotoBtn.addEventListener("click", startCountdown);

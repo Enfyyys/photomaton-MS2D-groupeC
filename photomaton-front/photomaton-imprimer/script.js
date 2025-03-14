@@ -4,7 +4,7 @@ const imagePreview = document.getElementById("image-preview");
 // Charger les images depuis le serveur
 async function loadImages() {
     try {
-        const response = await fetch("http://192.168.20.141:3000/images");
+        const response = await fetch("/images"); // ✅ Chemin relatif pour éviter les erreurs d'IP
         const images = await response.json();
 
         imageList.innerHTML = ""; // Effacer la liste existante
@@ -23,26 +23,25 @@ async function loadImages() {
             });
 
             listItem.innerHTML = `
-                <a href="#" onclick="showImage('${img.url}')">${img.url}</a>
+                <a href="#" onclick="showImage('${img.url}')">${img.url.split('/').pop()}</a>
                 <br><small>📅 ${formattedDate}</small>
             `;
             imageList.appendChild(listItem);
         });
     } catch (error) {
-        console.error("Erreur chargement des images:", error);
+        console.error("❌ Erreur chargement des images:", error);
     }
 }
 
-
 // Afficher une image dans l'aperçu
 function showImage(imageUrl) {
-    imagePreview.src = `http://192.168.20.141:3000/saved_images/${imageUrl}`;
+    imagePreview.src = imageUrl; // ✅ On garde l'URL telle quelle
 }
 
 // Imprimer l'image sélectionnée
 function printImage() {
     if (!imagePreview.src || imagePreview.src.includes("Sélectionnez")) {
-        alert("Aucune image sélectionnée !");
+        alert("⚠️ Aucune image sélectionnée !");
         return;
     }
 
@@ -55,7 +54,7 @@ function printImage() {
 // Simuler l'envoi par email (à remplacer par une vraie requête backend)
 function sendByEmail() {
     if (!imagePreview.src || imagePreview.src.includes("Sélectionnez")) {
-        alert("Aucune image sélectionnée !");
+        alert("⚠️ Aucune image sélectionnée !");
         return;
     }
 
