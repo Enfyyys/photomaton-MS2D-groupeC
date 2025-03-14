@@ -17,13 +17,20 @@ if (!fs.existsSync(localSavePath)) {
 app.use(cors());
 app.use(express.json());
 
-// Servir les fichiers statiques de ton application web
-app.use(express.static(path.join(__dirname, "../photomaton-dev")));
+// ✅ Servir le menu principal AVANT les autres fichiers statiques
+app.use(express.static(path.join(__dirname, "photomaton-front/photomaton-menu")));
+
+// ✅ Servir les autres applications (photo, impression)
+app.use(express.static(path.join(__dirname, "photomaton-front/photomaton-photo")));
+app.use(express.static(path.join(__dirname, "photomaton-front/photomaton-imprimer")));
+
+// ✅ Servir les images stockées localement
+app.use("/saved_images", express.static(localSavePath));
 
 // Configuration Multer (stockage temporaire)
 const upload = multer({ dest: "uploads/" });
 
-// Route pour récupérer l'ID de la dernière image locale
+// 📸 Route pour récupérer l'ID de la dernière image locale
 app.get("/last-image-id", async (req, res) => {
     try {
         const files = fs.readdirSync(localSavePath).filter(file => file.endsWith(".png"));
@@ -32,21 +39,21 @@ app.get("/last-image-id", async (req, res) => {
             return res.json({ nextId: 1 }); // Aucune image encore enregistrée
         }
 
-        // Trier les fichiers par date de création (du plus récent au plus ancien)
+        // Trier les fichiers par date décroissante
         files.sort((a, b) => fs.statSync(path.join(localSavePath, b)).mtimeMs - fs.statSync(path.join(localSavePath, a)).mtimeMs);
 
-        const lastFile = files[0]; // Prendre le plus récent
+        const lastFile = files[0];
         const lastId = parseInt(lastFile.split("-").pop().split(".")[0], 10) || 0;
         const nextId = lastId + 1;
 
         res.json({ nextId });
     } catch (error) {
-        console.error("Erreur récupération du dernier ID :", error);
+        console.error("❌ Erreur récupération du dernier ID :", error);
         res.status(500).json({ error: "Échec de récupération du dernier ID" });
     }
 });
 
-// Route pour uploader une image (et sauvegarde locale)
+// 📤 Route pour uploader une image (et sauvegarde locale)
 app.post("/upload", upload.single("file"), async (req, res) => {
     try {
         if (!req.file) {
@@ -68,24 +75,23 @@ app.post("/upload", upload.single("file"), async (req, res) => {
             localPath: localFilePath,
         });
     } catch (error) {
-        console.error("Erreur upload :", error);
+        console.error("❌ Erreur upload :", error);
         res.status(500).json({ error: "Échec de l'upload" });
     }
 });
 
-// Route pour récupérer les images locales avec leur date et heure
+// 🖼 Route pour récupérer les images locales
 app.get("/images", async (req, res) => {
     try {
-        const imageDir = path.join(__dirname, "saved_images");
-        const files = fs.readdirSync(imageDir);
+        const files = fs.readdirSync(localSavePath);
 
         const images = files.map(file => {
-            const filePath = path.join(imageDir, file);
+            const filePath = path.join(localSavePath, file);
             const stats = fs.statSync(filePath);
             
             return {
-                url: file,
-                created_at: stats.mtime.toISOString() // Format ISO (facile à manipuler côté frontend)
+                url: `/saved_images/${file}`,
+                created_at: stats.mtime.toISOString()
             };
         });
 
@@ -94,18 +100,12 @@ app.get("/images", async (req, res) => {
 
         res.json(images);
     } catch (error) {
-        console.error("Erreur récupération images:", error);
+        console.error("❌ Erreur récupération images:", error);
         res.status(500).json({ error: "Erreur récupération des images" });
     }
 });
 
-// Servir les images stockées localement
-app.use("/saved_images", express.static(localSavePath));
-
-// Route pour afficher menu.html à distance
-app.use(express.static(path.join(__dirname, "../photomaton_menu")));
-
-// Route pour afficher la liste des fichiers dans "saved_images"
+// 🖼 Route pour afficher la liste des fichiers dans "saved_images"
 app.get("/saved_images", (req, res) => {
     fs.readdir(localSavePath, (err, files) => {
         if (err) {
@@ -113,7 +113,7 @@ app.get("/saved_images", (req, res) => {
         }
         
         const imageLinks = files
-            .filter(file => file.endsWith(".png")) // Filtrer uniquement les images
+            .filter(file => file.endsWith(".png")) 
             .map(file => `<li><a href="/saved_images/${file}">${file}</a></li>`)
             .join("");
 
@@ -121,7 +121,7 @@ app.get("/saved_images", (req, res) => {
     });
 });
 
-// Démarrage du serveur
+// 🖥 Démarrage du serveur
 app.listen(port, "0.0.0.0", () => {
     console.log(`🚀 Serveur démarré sur http://192.168.20.141:${port}/`);
 });
